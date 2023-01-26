@@ -19,7 +19,7 @@ public class Category {
     private int id;
     private String identifier;
     private String categoryName;
-    private String topCategory;
+    private boolean topCategory;
     @ManyToOne(cascade = CascadeType.ALL)
     private Store store;
     @OneToMany(cascade = CascadeType.ALL)

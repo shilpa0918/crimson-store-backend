@@ -13,8 +13,6 @@ public class CategoryRequest {
 
     private String identifier;
     private String categoryName;
-    private String topCategory;
-    private Store store;
-    private List<Product> products;
-
+    private boolean topCategory;
+    private Integer storeId;
 }

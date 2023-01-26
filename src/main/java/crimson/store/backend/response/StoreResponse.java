@@ -1,6 +1,5 @@
 package crimson.store.backend.response;
 
-import crimson.store.backend.entity.Category;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,6 +13,5 @@ public class StoreResponse {
     private String storeName;
     private String model;
     private String currency;
-
-    private List<Category> categories;
+    private List<Integer> categoryIds;
 }
