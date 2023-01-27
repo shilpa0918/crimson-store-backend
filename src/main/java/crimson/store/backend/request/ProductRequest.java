@@ -1,6 +1,5 @@
 package crimson.store.backend.request;
 
-import crimson.store.backend.entity.Category;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,6 +16,6 @@ public class ProductRequest {
     private float listPrice;
     private float offerPrice;
 
-    private Category category;
+    private int categoryId;
 
 }

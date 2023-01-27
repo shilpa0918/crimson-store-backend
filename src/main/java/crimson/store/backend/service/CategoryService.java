@@ -18,6 +18,7 @@ public class CategoryService {
     CategoryRepo categoryRepo;
     @Autowired
     StoreRepo storeRepo;
+
     public CategoryResponse addCategory(CategoryRequest categoryRequest) {
         Category category = new Category();
         category.setCategoryName(categoryRequest.getCategoryName());

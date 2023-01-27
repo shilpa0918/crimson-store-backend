@@ -4,6 +4,7 @@ import crimson.store.backend.entity.Category;
 import crimson.store.backend.entity.Store;
 import crimson.store.backend.repo.StoreRepo;
 import crimson.store.backend.request.StoreRequest;
+import crimson.store.backend.response.StoreDataResponse;
 import crimson.store.backend.response.StoreResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,12 +38,37 @@ public class StoreService {
         store.setIdentifier(storeRequest.getIdentifier());
         List<Category> categoryS = storeRequest.getCategories();
         List<Integer> catIds = new ArrayList<>();
-        if(categoryS!=null) {
+        if (categoryS != null) {
             categoryS.stream().map(category -> {
                 return catIds.add(category.getId());
             });
             store.setCategoryIds(catIds);
         }
         return store;
+    }
+
+    public StoreDataResponse getStoreById(Integer storeId) {
+        Store store = storeRepo.findById(storeId).get();
+        return convertedToStoreResponse(store);
+
+    }
+
+    private StoreDataResponse convertedToStoreResponse(Store store) {
+        StoreDataResponse storeDataResponse = new StoreDataResponse();
+        storeDataResponse.setStoreName(store.getStoreName());
+        storeDataResponse.setCurrency(store.getCurrency());
+        storeDataResponse.setLanguage(store.getLanguage());
+        storeDataResponse.setModel(store.getModel());
+        storeDataResponse.setIdentifier(store.getIdentifier());
+        return storeDataResponse;
+    }
+
+    public StoreDataResponse getStoreByName(String storeName) {
+        Store store = storeRepo.findByStoreName(storeName);
+        return convertedToStoreResponse(store);
+    }
+
+    public void deleteStoreById(Integer storeId) {
+        storeRepo.deleteById(storeId);
     }
 }
