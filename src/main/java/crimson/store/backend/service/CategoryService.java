@@ -6,9 +6,13 @@ import crimson.store.backend.repo.CategoryRepo;
 import crimson.store.backend.repo.StoreRepo;
 import crimson.store.backend.request.CategoryRequest;
 import crimson.store.backend.response.CategoryResponse;
+import crimson.store.backend.response.ProductDTO;
+import crimson.store.backend.response.ProductsByCategoryDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -38,4 +42,5 @@ public class CategoryService {
         category.setStore(categoryRequest.getStore().getId());
         return category;
     }
+
 }
