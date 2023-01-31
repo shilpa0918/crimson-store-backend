@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -56,28 +57,36 @@ public class ProductService {
     }
 
     public ProductsByCategoryDTO getProductsByCategory(String categoryName) {
-        Category category = categoryRepo.findByCategoryName(categoryName);
-        List<Product> products = productRepo.findProductsByCategoryId(category.getId());
-        int productCount = products.size();
-        List<ProductDTO> productDTOS = new ArrayList<>();
-        ProductsByCategoryDTO productsByCategoryDTO = new ProductsByCategoryDTO();
-        System.out.println(products);
-        productDTOS = products.stream().map(product -> {
-            ProductDTO productDTO = new ProductDTO();
-            productDTO.setProductName(product.getProductName());
-            productDTO.setIdentifier(product.getIdentifier());
-            productDTO.setType(product.getType());
-            productDTO.setListPrice(product.getListPrice());
-            productDTO.setImageUrl(product.getImageUrl());
-            productDTO.setImageThumb(product.getImageThumb());
-            productDTO.setOfferPrice(product.getOfferPrice());
-            productDTO.setLongDesc(product.getLongDesc());
-            productDTO.setShortDesc(product.getShortDesc());
-            return productDTO;
-        }).collect(Collectors.toList());
-        productsByCategoryDTO.setProductCount(productCount);
-        productsByCategoryDTO.setProducts(productDTOS);
-        return productsByCategoryDTO;
+        Optional<Category> category = categoryRepo.findByCategoryName(categoryName);
+        if (category.isPresent()) {
+            if(category.get().isTopCategory()){
+                throw new CustomException("no products for this category");
+            }else {
+                List<Product> products = productRepo.findProductsByCategoryId(category.get().getId());
+                int productCount = products.size();
+                List<ProductDTO> productDTOS = new ArrayList<>();
+                ProductsByCategoryDTO productsByCategoryDTO = new ProductsByCategoryDTO();
+                System.out.println(products);
+                productDTOS = products.stream().map(product -> {
+                    ProductDTO productDTO = new ProductDTO();
+                    productDTO.setProductName(product.getProductName());
+                    productDTO.setIdentifier(product.getIdentifier());
+                    productDTO.setType(product.getType());
+                    productDTO.setListPrice(product.getListPrice());
+                    productDTO.setImageUrl(product.getImageUrl());
+                    productDTO.setImageThumb(product.getImageThumb());
+                    productDTO.setOfferPrice(product.getOfferPrice());
+                    productDTO.setLongDesc(product.getLongDesc());
+                    productDTO.setShortDesc(product.getShortDesc());
+                    return productDTO;
+                }).collect(Collectors.toList());
+                productsByCategoryDTO.setProductCount(productCount);
+                productsByCategoryDTO.setProducts(productDTOS);
+                return productsByCategoryDTO;
+            }
+        } else {
+            throw new CustomException("no category found exception");
+        }
     }
 
     public ProductsByCategoryDTO getTopCategoryProducts(Boolean topCategory) {
