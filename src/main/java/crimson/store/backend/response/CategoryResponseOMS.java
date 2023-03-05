@@ -1,16 +1,16 @@
-package crimson.store.backend.request;
-
+package crimson.store.backend.response;
 
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
 
 @Setter
 @Getter
-public class CategoryRequest {
+public class CategoryResponseOMS {
 
     private String identifier;
     private String name;
     private boolean topCategory;
-    private Integer storeId;
+
 }

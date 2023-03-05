@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class CategoryService {
@@ -25,22 +26,32 @@ public class CategoryService {
 
     public CategoryResponse addCategory(CategoryRequest categoryRequest) {
         Category category = new Category();
-        category.setCategoryName(categoryRequest.getCategoryName());
+        category.setCategoryName(categoryRequest.getName());
         category.setIdentifier(categoryRequest.getIdentifier());
         category.setTopCategory(categoryRequest.isTopCategory());
-        Optional<Store> store = storeRepo.findById(categoryRequest.getStoreId());
-        category.setStore(store.get());
+//        Optional<Store> store = storeRepo.findById(categoryRequest.getStoreId());
+//        category.setStore(store.get());
         Category addedCategory = categoryRepo.saveAndFlush(category);
         return ConvertedToCategoryDto(addedCategory);
     }
 
     private CategoryResponse ConvertedToCategoryDto(Category categoryRequest) {
         CategoryResponse category = new CategoryResponse();
-        category.setCategoryName(categoryRequest.getCategoryName());
+        category.setName(categoryRequest.getCategoryName());
         category.setIdentifier(categoryRequest.getIdentifier());
         category.setTopCategory(categoryRequest.isTopCategory());
-        category.setStore(categoryRequest.getStore().getId());
+      //  category.setStore(categoryRequest.getStore().getId());
         return category;
     }
 
+    public List<CategoryResponse> getCategory() {
+        List<Category> categories = categoryRepo.findAll();
+        List<CategoryResponse> categoryResponses = categories.stream().map(category -> {
+            CategoryResponse categoryResponse = new CategoryResponse();
+            categoryResponse.setName(category.getCategoryName());
+            categoryResponse.setIdentifier(category.getIdentifier());
+         return categoryResponse;
+        }).collect(Collectors.toList());
+        return categoryResponses;
+    }
 }

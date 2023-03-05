@@ -5,17 +5,13 @@ import lombok.Setter;
 
 @Setter
 @Getter
-public class ProductRequest {
+public class ProductRequestOMS {
     private String productName;
     private String identifier;
-    private String type;
     private String imageString;
     private String imageThumb;
-    private String shortDesc;
-    private String longDesc;
-    private float listPrice;
-    private float offerPrice;
-
-    private int categoryId;
-
+    private int listPrice;
+    private int offerPrice;
+    private String categoryName;
+    private CategoryRequestOMS category;
 }

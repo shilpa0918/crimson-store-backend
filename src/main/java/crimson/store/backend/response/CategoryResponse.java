@@ -10,7 +10,7 @@ import java.util.List;
 public class CategoryResponse {
 
     private String identifier;
-    private String categoryName;
+    private String name;
     private boolean topCategory;
     private Integer store;
     private List<Integer> products;
