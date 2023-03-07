@@ -56,7 +56,7 @@ public class ProductService {
         }
         System.out.println("images:"+images);
         productResponse.setImageString(images);
-        productResponse.setListPrice((int) product.getListPrice());
+        productResponse.setBasePrice((int) product.getListPrice());
         productResponse.setOfferPrice((int) product.getOfferPrice());
         productResponse.setCategoryName(product.getCategory().getCategoryName());
         return productResponse;
@@ -70,20 +70,21 @@ public class ProductService {
             } else {
                 List<Product> products = productRepo.findProductsByCategoryId(category.get().getId());
                 int productCount = products.size();
-                List<ProductDTO> productDTOS = new ArrayList<>();
+                List<ProductResponseOMS> productDTOS = new ArrayList<>();
                 ProductsByCategoryDTO productsByCategoryDTO = new ProductsByCategoryDTO();
                 System.out.println(products);
                 productDTOS = products.stream().map(product -> {
-                    ProductDTO productDTO = new ProductDTO();
+                    ProductResponseOMS productDTO = new ProductResponseOMS();
                     productDTO.setProductName(product.getProductName());
                     productDTO.setIdentifier(product.getIdentifier());
-                    productDTO.setType(product.getType());
-                    productDTO.setListPrice(product.getListPrice());
-                    productDTO.setImageUrl(product.getImageUrl());
-                    productDTO.setImageThumb(product.getImageThumb());
-                    productDTO.setOfferPrice(product.getOfferPrice());
-                    productDTO.setLongDesc(product.getLongDesc());
-                    productDTO.setShortDesc(product.getShortDesc());
+                    productDTO.setBasePrice((int) product.getListPrice());
+                    productDTO.setOfferPrice((int) product.getOfferPrice());
+                    String[] imgs =  product.getImageUrl().split(";");
+                    List<String> images = new ArrayList<>();
+                    for(String img:imgs){
+                        images.add(img);
+                    }
+                    productDTO.setImages(images);
                     return productDTO;
                 }).collect(Collectors.toList());
                 productsByCategoryDTO.setProductCount(productCount);
@@ -101,20 +102,15 @@ public class ProductService {
             throw new CustomException("Category does not have data!!");
         List<Product> products = productRepo.findProductsByCategoryId(category.getId());
         int productCount = products.size();
-        List<ProductDTO> productDTOS = new ArrayList<>();
+        List<ProductResponseOMS> productDTOS = new ArrayList<>();
         ProductsByCategoryDTO productsByCategoryDTO = new ProductsByCategoryDTO();
         System.out.println(products);
         productDTOS = products.stream().map(product -> {
-            ProductDTO productDTO = new ProductDTO();
+            ProductResponseOMS productDTO = new ProductResponseOMS();
             productDTO.setProductName(product.getProductName());
             productDTO.setIdentifier(product.getIdentifier());
-            productDTO.setType(product.getType());
-            productDTO.setListPrice(product.getListPrice());
-            productDTO.setImageUrl(product.getImageUrl());
-            productDTO.setImageThumb(product.getImageThumb());
-            productDTO.setOfferPrice(product.getOfferPrice());
-            productDTO.setLongDesc(product.getLongDesc());
-            productDTO.setShortDesc(product.getShortDesc());
+            productDTO.setBasePrice((int) product.getListPrice());
+            productDTO.setOfferPrice((int) product.getOfferPrice());
             return productDTO;
         }).collect(Collectors.toList());
         productsByCategoryDTO.setProductCount(productCount);
@@ -207,5 +203,34 @@ public class ProductService {
         else if (sortType.equalsIgnoreCase("productName"))
             sortedProductResponses = productResponses.stream().sorted(Comparator.comparing(n1 -> n1.getProductName())).collect(Collectors.toList());
         return sortedProductResponses;
+    }
+
+
+    public ProductResponseOMS getProductsByCategoryId(String categoryId) {
+        Optional<Category> category = categoryRepo.findById(Integer.valueOf(categoryId));
+        ProductResponseOMS productDTO;
+        if (category.isPresent()) {
+            List<Product> products = productRepo.findProductsByCategoryId(category.get().getId());
+            System.out.println(products);
+            productDTO = new ProductResponseOMS();
+            products.stream().map(product -> {
+
+                productDTO.setProductName(product.getProductName());
+                productDTO.setIdentifier(product.getIdentifier());
+                productDTO.setBasePrice((int) product.getListPrice());
+                String[] imgs = product.getImageUrl().split(";");
+                List<String> images = new ArrayList<>();
+                for (String img : imgs) {
+                    images.add(img);
+                }
+                System.out.println("images:" + images);
+                productDTO.setImages(images);
+                productDTO.setOfferPrice((int) product.getOfferPrice());
+                return productDTO;
+            }).collect(Collectors.toList());
+        } else {
+            throw new CustomException("no category found exception");
+        }
+        return productDTO;
     }
 }

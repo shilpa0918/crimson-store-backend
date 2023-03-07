@@ -48,6 +48,7 @@ public class CategoryService {
         List<Category> categories = categoryRepo.findAll();
         List<CategoryResponse> categoryResponses = categories.stream().map(category -> {
             CategoryResponse categoryResponse = new CategoryResponse();
+            categoryResponse.setCategoryId(category.getId());
             categoryResponse.setName(category.getCategoryName());
             categoryResponse.setIdentifier(category.getIdentifier());
          return categoryResponse;

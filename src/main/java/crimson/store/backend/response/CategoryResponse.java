@@ -8,7 +8,7 @@ import java.util.List;
 @Setter
 @Getter
 public class CategoryResponse {
-
+    private int categoryId;
     private String identifier;
     private String name;
     private boolean topCategory;

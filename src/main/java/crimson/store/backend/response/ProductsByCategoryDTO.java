@@ -11,6 +11,6 @@ import java.util.List;
 public class ProductsByCategoryDTO {
 
     private Integer productCount;
-    private List<ProductDTO> products;
+    private List<ProductResponseOMS> products;
 
 }

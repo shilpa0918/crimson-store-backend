@@ -9,10 +9,12 @@ import java.util.List;
 @Setter
 @Getter
 public class ProductResponseOMS {
+    private int productId;
     private String productName;
     private String identifier;
     private List<String> imageString;
-    private int listPrice;
+    private List<String> images;
+    private int basePrice;
     private int offerPrice;
     private String categoryName;
     private CategoryRequestOMS category;

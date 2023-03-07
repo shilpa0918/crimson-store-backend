@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -24,8 +25,8 @@ public class ProductController {
         ProductResponseOMS productResponse = productService.addProduct(productRequest);
         return new ResponseEntity(productResponse, HttpStatus.CREATED);
     }
-
     @GetMapping("/getProductsByCategory/{categoryName}")
+    @CrossOrigin({"http://localhost:5173/"})
     public ResponseEntity getProductsByCategory(@PathVariable String categoryName) {
         ProductsByCategoryDTO productsByCategoryDTO = productService.getProductsByCategory(categoryName);
         return new ResponseEntity(productsByCategoryDTO, HttpStatus.OK);
@@ -56,4 +57,13 @@ public class ProductController {
         List<ProductResponse> productResponses =  productService.sortProductUsingStream(sortType);
         return new ResponseEntity(productResponses,HttpStatus.OK);
     }
+
+    @GetMapping("/products/{categoryId}")
+    @CrossOrigin({"http://localhost:5173/"})
+    public ResponseEntity getProductsByCategoryId(@PathVariable String categoryId) {
+        List<ProductResponseOMS> productsByCategoryDTO = new ArrayList<>();
+        productsByCategoryDTO.add(productService.getProductsByCategoryId(categoryId));
+        return new ResponseEntity(productsByCategoryDTO, HttpStatus.OK);
+    }
+
 }

@@ -27,4 +27,8 @@ public class Product {
     @ManyToOne(cascade = CascadeType.ALL)
     private Category category;
 
+    @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER,mappedBy = "product")
+    private CartItem cartItem;
+
+
 }
