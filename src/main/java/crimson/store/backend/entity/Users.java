@@ -23,4 +23,5 @@ public class Users {
     private Cart cart;
     @OneToMany(cascade = CascadeType.ALL)
     private List<Address> address;
+    private String password;
 }
